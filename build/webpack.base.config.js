@@ -1,28 +1,46 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
-    entry: './src/index.ts',
+    entry: {
+        'app': './src/index.jsx'
+    },
     output: {
-        filename: 'app.js'
+        filename: '[name].[chunkhash:8].js'
     },
     resolve: {
-        extensions: ['.js', '.ts', '.tsx']
+        extensions: ['.js', '.jsx']
     },
     module: {
         rules: [
             {
-                test: /\.tsx?$/i,
+                test: /\.jsx?$/i,
                 use: [{
-                    loader: 'ts-loader'
+                    loader: 'babel-loader'
                 }],
                 exclude: /node_modules/
+            },
+            {
+                test: /\.css$/i,
+                use: [{ loader: 'style-loader' }, { loader: 'css-loader', options: { modules: { localIdentName: '[path][name]__[local]--[hash:base64:5]' } } }],
+            },
+            {
+                test: /\.(png|jpe?g|gif)$/i,
+                use: [
+                    {
+                        loader: 'file-loader'
+                    }
+                ]
             }
         ]
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: './src/tpl/index.html',
-            title: 'typescript in action'
+            template: './src/tpl/index.html'
         })
-    ]
+    ],
+    optimization: {
+        splitChunks: {
+            chunks: 'all'
+        }
+    }
 }

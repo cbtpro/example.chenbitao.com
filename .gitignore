@@ -1,1 +1,4 @@
-node_modules
+# 忽略node_modules文件夹
+node_modules/
+# 忽略dist文件夹
+dist/
